@@ -20,15 +20,15 @@ CI_ENVIRONMENT_HOSTNAME="${CI_ENVIRONMENT_HOSTNAME/https:\/\//}"
 
 export CI_ENVIRONMENT_HOSTNAME=$CI_ENVIRONMENT_HOSTNAME
 
-echo "Creating namespace..."
-cat <<EOF | kubectl apply -f -
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: $KUBE_NAMESPACE
-EOF
-echo "Namespace created"
-echo
+#echo "Creating namespace..."
+#cat <<EOF | kubectl apply -f -
+#kind: Namespace
+#apiVersion: v1
+#metadata:
+#  name: $KUBE_NAMESPACE
+#EOF
+#echo "Namespace created"
+#echo
 
 echo "Creating registry secret"
 kubectl create secret -n $KUBE_NAMESPACE \
