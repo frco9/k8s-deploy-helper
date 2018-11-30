@@ -24,7 +24,7 @@ if ! kubectl get namespace $KUBE_NAMESPACE; then
   echo "No namespace is created yet. Creating one for you."
   kubectl create namespace $KUBE_NAMESPACE
   echo "Namespace created"
-done
+fi
 
 echo "Creating registry secret"
 kubectl create secret -n $KUBE_NAMESPACE \
