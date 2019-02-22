@@ -83,6 +83,38 @@ if [ ! -d "$CI_PROJECT_DIR/kubernetes" ]; then
   fi
 fi
 
+if [ -f "$CI_PROJECT_DIR/kubernetes/requirement.yml" ]; then
+  echo "Requirement manifests found, building helm chart"
+  [ ! -f "$CI_PROJECT_DIR/kubernetes/requirement_values.yml" ]; then
+        echo "Found requirement.yml but no values for it. The requirement_values.yml must be provided with the requirement.yml. Quitting."
+        exit 1
+  fi
+  mkdir -p /tmp/chart
+  mkdir -p /tmp/manifests
+  mv $CI_PROJECT_DIR/kubernetes/requirement.yml /tmp/chart/
+  mv $CI_PROJECT_DIR/kubernetes/requirement_values.yml /tmp/
+  
+  echo "Fetching helm depedancies"
+  helm dependency update /tmp/chart/
+  helm dependency build /tmp/chart/
+  echo "Substituing env variables in values file"
+  envsubst < /tmp/requirement_values.yml > /tmp/requirement_values.yml
+  cat /tmp/requirement_values.yml 
+
+  echo "Building templates"
+  helm template --namespace=$KUBE_NAMESPACE --values /tmp/requirement_values.yml --name=$CI_ENVIRONMENT_SLUG --output-dir /tmp/manifests /tmp/chart
+  
+  for d in /tmp/manifests/auto-deploy/charts/*/ ; do
+    dir=${d%*/}
+    service=${dir##*/}
+    
+    for f in $dir/templates/*.yaml ; do
+      file=${f##*/} 
+      cp f $CI_PROJECT_DIR/kubernetes/$service_$file
+    done
+  done
+fi
+
 echo "Rendering your manifest templates."
 if [ -d "$CI_PROJECT_DIR/kubernetes" ]; then
   # Move any stage specific manifests into the main yaml
