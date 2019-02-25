@@ -85,9 +85,9 @@ fi
 
 if [ -f "$CI_PROJECT_DIR/kubernetes/requirement.yaml" ]; then
   echo "Requirement manifests found, building helm chart"
-  [ ! -f "$CI_PROJECT_DIR/kubernetes/requirement_values.yaml" ]; then
-        echo "Found requirement.yaml but no values for it. The requirement_values.yaml must be provided with the requirement.yaml. Quitting."
-        exit 1
+  if [ ! -f "$CI_PROJECT_DIR/kubernetes/requirement_values.yaml" ]; then
+    echo "Found requirement.yaml but no values for it. The requirement_values.yaml must be provided with the requirement.yaml. Quitting."
+    exit 1
   fi
   mkdir -p /tmp/chart
   mkdir -p /tmp/manifests
