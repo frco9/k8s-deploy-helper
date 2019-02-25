@@ -93,6 +93,13 @@ if [ -f "$CI_PROJECT_DIR/kubernetes/requirement.yml" ]; then
   mkdir -p /tmp/manifests
   mv $CI_PROJECT_DIR/kubernetes/requirement.yml /tmp/chart/
   mv $CI_PROJECT_DIR/kubernetes/requirement_values.yml /tmp/
+
+  cat >/tmp/chart/ <<EOL
+apiVersion: v1
+description: K8s deploy helper
+name: k8s-deploy-helper
+version: 0.0.1
+EOL
   
   echo "Fetching helm depedancies"
   helm dependency update /tmp/chart/
