@@ -83,16 +83,16 @@ if [ ! -d "$CI_PROJECT_DIR/kubernetes" ]; then
   fi
 fi
 
-if [ -f "$CI_PROJECT_DIR/kubernetes/requirement.yml" ]; then
+if [ -f "$CI_PROJECT_DIR/kubernetes/requirement.yaml" ]; then
   echo "Requirement manifests found, building helm chart"
-  [ ! -f "$CI_PROJECT_DIR/kubernetes/requirement_values.yml" ]; then
-        echo "Found requirement.yml but no values for it. The requirement_values.yml must be provided with the requirement.yml. Quitting."
+  [ ! -f "$CI_PROJECT_DIR/kubernetes/requirement_values.yaml" ]; then
+        echo "Found requirement.yaml but no values for it. The requirement_values.yaml must be provided with the requirement.yaml. Quitting."
         exit 1
   fi
   mkdir -p /tmp/chart
   mkdir -p /tmp/manifests
-  mv $CI_PROJECT_DIR/kubernetes/requirement.yml /tmp/chart/
-  mv $CI_PROJECT_DIR/kubernetes/requirement_values.yml /tmp/
+  mv $CI_PROJECT_DIR/kubernetes/requirement.yaml /tmp/chart/
+  mv $CI_PROJECT_DIR/kubernetes/requirement_values.yaml /tmp/
 
   cat >/tmp/chart/ <<EOL
 apiVersion: v1
@@ -105,11 +105,11 @@ EOL
   helm dependency update /tmp/chart/
   helm dependency build /tmp/chart/
   echo "Substituing env variables in values file"
-  envsubst < /tmp/requirement_values.yml > /tmp/requirement_values.yml
-  cat /tmp/requirement_values.yml 
+  envsubst < /tmp/requirement_values.yaml > /tmp/requirement_values.yaml
+  cat /tmp/requirement_values.yaml 
 
   echo "Building templates"
-  helm template --namespace=$KUBE_NAMESPACE --values /tmp/requirement_values.yml --name=$CI_ENVIRONMENT_SLUG --output-dir /tmp/manifests /tmp/chart
+  helm template --namespace=$KUBE_NAMESPACE --values /tmp/requirement_values.yaml --name=$CI_ENVIRONMENT_SLUG --output-dir /tmp/manifests /tmp/chart
   
   for d in /tmp/manifests/auto-deploy/charts/*/ ; do
     dir=${d%*/}
