@@ -113,13 +113,13 @@ EOL
   echo "Building templates"
   helm template --namespace=$KUBE_NAMESPACE --values /tmp/requirement_values.yaml --name=$CI_ENVIRONMENT_SLUG --output-dir /tmp/manifests /tmp/chart
   
-  for d in /tmp/manifests/auto-deploy/charts/*/ ; do
+  for d in /tmp/manifests/k8s-deploy-helper/charts/*/ ; do
     dir=${d%*/}
     service=${dir##*/}
     
     for f in $dir/templates/*.yaml ; do
       file=${f##*/} 
-      cp f $CI_PROJECT_DIR/kubernetes/$service_$file
+      cp $f "$CI_PROJECT_DIR/kubernetes/$service\_$file"
     done
   done
 fi
