@@ -84,18 +84,18 @@ if [ ! -d "$CI_PROJECT_DIR/kubernetes" ]; then
   fi
 fi
 
-if [ -f "$CI_PROJECT_DIR/kubernetes/requirement.yaml" ]; then
+if [ -f "$CI_PROJECT_DIR/kubernetes/requirements.yaml" ]; then
   echo "Requirement manifests found, building helm chart"
   if [ ! -f "$CI_PROJECT_DIR/kubernetes/requirement_values.yaml" ]; then
-    echo "Found requirement.yaml but no values for it. The requirement_values.yaml must be provided with the requirement.yaml. Quitting."
+    echo "Found requirements.yaml but no values for it. The requirement_values.yaml must be provided with the requirements.yaml. Quitting."
     exit 1
   fi
   mkdir -p /tmp/chart
   mkdir -p /tmp/manifests
-  mv $CI_PROJECT_DIR/kubernetes/requirement.yaml /tmp/chart/
+  mv $CI_PROJECT_DIR/kubernetes/requirements.yaml /tmp/chart/
   mv $CI_PROJECT_DIR/kubernetes/requirement_values.yaml /tmp/
 
-  cat >/tmp/chart/ <<EOL
+  cat >/tmp/chart/Chart.yaml <<EOL
 apiVersion: v1
 description: K8s deploy helper
 name: k8s-deploy-helper
@@ -103,6 +103,7 @@ version: 0.0.1
 EOL
   
   echo "Fetching helm depedancies"
+  helm init --client-only
   helm dependency update /tmp/chart/
   helm dependency build /tmp/chart/
   echo "Substituing env variables in values file"
