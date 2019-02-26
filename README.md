@@ -347,9 +347,9 @@ Starting in 3.1.0, we added an option for manifest-less deploys to help us migra
 
 * PORT: 5000 - The port your app listens on
 
-* PROBE_URL: / - The URL that will get hit for readiness probe
+* READINESS_PROBE_URL: / - The URL that will get hit for readiness probe
 
-* LIVENESS_PROBE: /bin/true - The command used for the liveness probe
+* LIVENESS_PROBE_URL: / - The URL that will get hit for liveness probe
 
 ### Other (workers)
 

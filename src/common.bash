@@ -121,15 +121,15 @@ set_defaults() {
   fi
 
   if [[ ! -v SCALE_MIN ]]; then
-    export SCALE_MIN=2
+    export SCALE_MIN=1
   fi
 
   if [[ ! -v SCALE_MAX ]]; then
-    export SCALE_MAX=4
+    export SCALE_MAX=3
   fi
 
   if [[ ! -v SCALE_CPU ]]; then
-    export SCALE_CPU=60
+    export SCALE_CPU=80
   fi
 
   if [[ ! -v PDB_MIN ]]; then
@@ -140,16 +140,20 @@ set_defaults() {
     export PORT=5000
   fi
 
-  if [[ ! -v PROBE_URL ]]; then
-    export PROBE_URL="/"
+  if [[ ! -v READINESS_PROBE_URL ]]; then
+    export READINESS_PROBE_URL="/"
+  fi
+  
+  if [[ ! -v LIVENESS_PROBE_URL ]]; then
+    export LIVENESS_PROBE_URL="/"
   fi
 
   if [[ ! -v LIMIT_CPU ]]; then
-    export LIMIT_CPU="1"
+    export LIMIT_CPU="0.1"
   fi
 
   if [[ ! -v LIMIT_MEMORY ]]; then
-    export LIMIT_MEMORY="512Mi"
+    export LIMIT_MEMORY="128Mi"
   fi
 
   if [[ ! -v LIVENESS_PROBE ]]; then
@@ -180,15 +184,15 @@ set_prefix_defaults() {
   fi
 
   if [[ ! -v ${scale_cpu} ]]; then
-    export ${scale_cpu}="60"
+    export ${scale_cpu}="80"
   fi
 
   if [[ ! -v ${memory} ]]; then
-    export ${memory}="512Mi"
+    export ${memory}="128Mi"
   fi
 
   if [[ ! -v ${cpu} ]]; then
-    export ${cpu}="1"
+    export ${cpu}="0.1"
   fi
 
   if [[ ! -v ${liveness} ]]; then

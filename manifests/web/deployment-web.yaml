@@ -37,20 +37,26 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: ["bash", "-c", "sleep 20"]
+              command: ["sh", "-c", "sleep 20"]
         resources:
           limits:
             cpu: "$LIMIT_CPU"
             memory: "$LIMIT_MEMORY"
-        livenessProbe:
-          exec:
-            command:
-              - /bin/bash
-              - -c
-              - $LIVENESS_PROBE
         readinessProbe:
           httpGet:
-            path: $PROBE_URL
+            path: $READINESS_PROBE_URL
+            port: $PORT
+            scheme: HTTP
+            httpHeaders:
+              - name: Host
+                value: 127.0.0.1
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 3
+          failureThreshold: 10
+        livenessProbe:
+          httpGet:
+            path: $LIVENESS_PROBE_URL
             port: $PORT
             scheme: HTTP
             httpHeaders:

@@ -43,7 +43,7 @@ spec:
         livenessProbe:
           exec:
             command:
-              - /bin/bash
+              - /bin/sh
               - -c
               - ${{PREFIX}}_LIVENESS_PROBE
         env:
